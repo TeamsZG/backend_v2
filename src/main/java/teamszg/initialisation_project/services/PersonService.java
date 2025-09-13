@@ -17,7 +17,26 @@ public class PersonService {
     }
 
 
-    public List<Person> search(String personName){
-        return personRepository.findAll();
+    public Person searchByName(String name) {
+        return personRepository.findPersonByName(name);
     }
+
+    public Person addClient(Person person){
+        return personRepository.save(person);
+    }
+
+    public Person updatePerson(String name, Person updatePerson) throws Exception {
+        Person personAvantUpdate = personRepository.findPersonByName(name);
+        personAvantUpdate.setName(updatePerson.getName());
+        personAvantUpdate.setAge(updatePerson.getAge());
+        personAvantUpdate.setGender(updatePerson.getGender());
+
+        return personRepository.save(personAvantUpdate);
+    }
+
+    public void deletePerson(String name) throws Exception {
+        Person person = personRepository.findPersonByName(name);
+        personRepository.delete(person);
+    }
+
 }
