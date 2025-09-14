@@ -17,7 +17,7 @@ public class PersonService {
     }
 
 
-    public List<Person> search(String personName){
-        return personRepository.findAll();
+    public Person searchByName(String name){
+        return personRepository.findPersonByName(name);
     }
 }
