@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import teamszg.initialisation_project.models.Person;
 import teamszg.initialisation_project.services.PersonService;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/persons")
@@ -13,28 +15,32 @@ public class PersonController {
     @Autowired
     private PersonService personService;
 
-    @GetMapping("/search")
-    public Person searchByName(@RequestParam String name) throws Exception {
-        return personService.searchByName(name);
+    @GetMapping
+    public List<Person> getAllPersons() throws Exception {
+        return personService.getAllPersons();
     }
 
-    @PostMapping("/ajout")
-    public Person ajouterPersonne(@RequestBody  Person person) throws Exception {
+    @GetMapping("/search")
+    public List<Person> searchByName(@RequestParam String name) throws Exception {
+        return personService.searchByName(name); // adapter le service pour retourner List<Person>
+    }
+
+    @PostMapping
+    public Person createPerson(@RequestBody Person person) throws Exception {
         return personService.addClient(person);
     }
 
-    @PutMapping("/update")
-    public Person updatePerson(@RequestParam String name, @RequestBody Person person) throws Exception {
-        return personService.updatePerson(name, person);
+    @PutMapping("/{id}")
+    public Person updatePerson(@PathVariable Long id, @RequestBody Person person) throws Exception {
+        return personService.updatePerson(id, person);
+
     }
 
-    @DeleteMapping("/delete")
-    public String deletePerson(@RequestParam String name) throws Exception {
-        personService.deletePerson(name);
-        return name + " has been deleted successfully";
+    @DeleteMapping("/{id}")
+    public String deletePerson(@PathVariable Long id) throws Exception {
+        personService.deletePerson(id);
+        return "Supression de l'id : " + id ;
     }
-
-
 
 
 
