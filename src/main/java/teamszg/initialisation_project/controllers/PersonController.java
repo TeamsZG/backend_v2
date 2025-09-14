@@ -1,13 +1,9 @@
 package teamszg.initialisation_project.controllers;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import teamszg.initialisation_project.models.Person;
 import teamszg.initialisation_project.services.PersonService;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -21,4 +17,25 @@ public class PersonController {
     public Person searchByName(@RequestParam String name) throws Exception {
         return personService.searchByName(name);
     }
+
+    @PostMapping("/ajout")
+    public Person ajouterPersonne(@RequestBody  Person person) throws Exception {
+        return personService.addClient(person);
+    }
+
+    @PutMapping("/update")
+    public Person updatePerson(@RequestParam String name, @RequestBody Person person) throws Exception {
+        return personService.updatePerson(name, person);
+    }
+
+    @DeleteMapping("/delete")
+    public String deletePerson(@RequestParam String name) throws Exception {
+        personService.deletePerson(name);
+        return name + " has been deleted successfully";
+    }
+
+
+
+
+
 }
