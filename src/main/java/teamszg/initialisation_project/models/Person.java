@@ -20,7 +20,6 @@ public class Person {
 
     private String gender;
 
-
     public long getId() {
         return id;
     }

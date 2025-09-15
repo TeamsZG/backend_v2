@@ -1,10 +1,15 @@
 package teamszg.initialisation_project.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import teamszg.initialisation_project.models.Person;
+
+import java.util.List;
 
 
 public interface IPersonRepository extends JpaRepository<Person, Long> {
-    Person findPersonByName(String name);
+    Person findPersonById(Long id);
+    List<Person> findAllByName(String name);
+
+
+
 }
