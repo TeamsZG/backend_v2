@@ -16,7 +16,7 @@ public class PersonService {
     }
 
     public List<Person> searchByName(String name) throws Exception {
-        return personRepository.findAllByName(name);
+        return personRepository.findAllByNameIgnoreCase(name);
     }
 
     public Person addClient(Person person) throws Exception {

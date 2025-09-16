@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IPersonRepository extends JpaRepository<Person, Long> {
     Person findPersonById(Long id);
-    List<Person> findAllByName(String name);
+    List<Person> findAllByNameIgnoreCase(String name);
 
 
 
