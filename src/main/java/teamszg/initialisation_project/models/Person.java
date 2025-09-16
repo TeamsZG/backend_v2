@@ -1,24 +1,16 @@
 package teamszg.initialisation_project.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 
 @Entity
+@Table(name = "person")
 public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
-    private String name;
-
-    private int age;
-
-    private String gender;
 
     public long getId() {
         return id;
@@ -52,5 +44,10 @@ public class Person {
         this.gender = gender;
     }
 
+    private String name;
+
+    private int age;
+
+    private String gender;
 
 }
