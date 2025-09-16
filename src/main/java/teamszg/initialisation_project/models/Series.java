@@ -2,7 +2,7 @@ package teamszg.initialisation_project.models;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 
 
 @Entity
@@ -12,9 +12,10 @@ public class Series {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String genre;
+    private int nbEpisodes;
+    private double note;
 
     public Long getId() {
         return id;
@@ -56,6 +57,4 @@ public class Series {
         this.note = note;
     }
 
-    private int nbEpisodes;
-    private double note;
 }
