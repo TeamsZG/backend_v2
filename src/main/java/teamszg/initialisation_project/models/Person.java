@@ -1,7 +1,6 @@
 package teamszg.initialisation_project.models;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 
 @Entity

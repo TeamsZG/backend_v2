@@ -19,7 +19,7 @@ public class PersonService {
         return personRepository.findAllByNameIgnoreCase(name);
     }
 
-    public Person addClient(Person person) throws Exception {
+    public Person addPersons(Person person) throws Exception {
         return personRepository.save(person);
     }
 

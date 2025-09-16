@@ -22,12 +22,12 @@ public class PersonController {
 
     @GetMapping("/search")
     public List<Person> searchByName(@RequestParam String name) throws Exception {
-        return personService.searchByName(name); // adapter le service pour retourner List<Person>
+        return personService.searchByName(name);
     }
 
     @PostMapping
     public Person createPerson(@RequestBody Person person) throws Exception {
-        return personService.addClient(person);
+        return personService.addPersons(person);
     }
 
     @PutMapping("/{id}")
@@ -39,7 +39,7 @@ public class PersonController {
     @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable Long id) throws Exception {
         personService.deletePerson(id);
-        return "Supression de l'id : " + id ;
+        return "Supression de l'id personne: " + id ;
     }
 
 
