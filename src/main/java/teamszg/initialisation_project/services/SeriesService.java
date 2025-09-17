@@ -11,9 +11,10 @@ public class SeriesService {
 
     private final ISeriesRepository seriesRepository;
 
-    public SeriesService(ISeriesRepository seriesRepository) throws Exception {
+    public SeriesService(ISeriesRepository seriesRepository) {
         this.seriesRepository = seriesRepository;
     }
+
 
     public List<Series> findAllSeries() throws Exception{
         List<Series> seriesList = seriesRepository.findAll();
@@ -62,10 +63,9 @@ public class SeriesService {
     // Avec la méthode retainAll on par sur un principe de filtre successif.
     // En part de la totalité des séries et après chaque conditions de filtre elle devient de plus en plus petit
 
+    public List<Series> search(String genre, String title, Integer minEpisodes) throws Exception {
 
-    public List<Series> search(String genre, String title, Integer nbEpisodes) throws Exception {
-
-        if ((genre == null || genre.isEmpty()) && (title == null || title.isEmpty()) && (nbEpisodes == null || nbEpisodes <= 0)) {
+        if ((genre == null || genre.isEmpty()) && (title == null || title.isEmpty()) && (minEpisodes == null || minEpisodes <= 0)) {
             throw new Exception("Oups filtre non validé");
         }
 
@@ -81,8 +81,8 @@ public class SeriesService {
             allSeries.retainAll(titleList);
         }
 
-        if (nbEpisodes != null && nbEpisodes > 0) {
-            List<Series> nbEpisodesList = seriesRepository.findSeriesByNbEpisodesGreaterThanEqual(nbEpisodes);
+        if (minEpisodes  != null && minEpisodes > 0) {
+            List<Series> nbEpisodesList = seriesRepository.findSeriesByNbEpisodesGreaterThanEqual(minEpisodes);
             allSeries.retainAll(nbEpisodesList);
         }
 

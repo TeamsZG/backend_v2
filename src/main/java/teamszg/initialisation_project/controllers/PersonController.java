@@ -3,9 +3,11 @@ package teamszg.initialisation_project.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import teamszg.initialisation_project.models.Person;
+import teamszg.initialisation_project.models.Series;
 import teamszg.initialisation_project.services.PersonService;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @CrossOrigin
@@ -42,6 +44,15 @@ public class PersonController {
         return "Supression de l'id personne: " + id ;
     }
 
+    @GetMapping("/{id}/history")
+    public Set<Series> getHistorique(@PathVariable Long id) throws Exception {
+        return personService.getAllHistory(id);
+    }
 
 
+
+    @PostMapping("/{id}/history/{seriesId}")
+    public Person addHistory(@PathVariable Long id, @PathVariable Long seriesId) throws Exception {
+        return personService.addHistory(id, seriesId);
+    }
 }

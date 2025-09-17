@@ -17,6 +17,8 @@ public class Series {
     private int nbEpisodes;
     private double note;
 
+
+
     public Long getId() {
         return id;
     }

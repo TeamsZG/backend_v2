@@ -10,6 +10,4 @@ public interface IPersonRepository extends JpaRepository<Person, Long> {
     Person findPersonById(Long id);
     List<Person> findAllByNameIgnoreCase(String name);
 
-
-
 }

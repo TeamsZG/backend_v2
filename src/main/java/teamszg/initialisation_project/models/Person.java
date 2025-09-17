@@ -2,6 +2,11 @@ package teamszg.initialisation_project.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "person")
@@ -10,6 +15,23 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    private String name;
+
+    private int age;
+
+    private String gender;
+
+
+    @ManyToMany
+    @JoinTable(
+            name = "historique",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "series_id")
+    )
+
+    // Comme ca on évite les doublons
+    private Set<Series> history = new HashSet<>();
 
     public long getId() {
         return id;
@@ -43,10 +65,14 @@ public class Person {
         this.gender = gender;
     }
 
-    private String name;
+    public Set<Series> getHistory() {
+        return history;
+    }
 
-    private int age;
+    public void setHistory(Set<Series> history) {
+        this.history = history;
+    }
 
-    private String gender;
+    // Source manyToMany : https://www.geeksforgeeks.org/advance-java/jpa-many-to-many-mapping/
 
 }
