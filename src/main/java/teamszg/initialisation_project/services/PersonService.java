@@ -2,17 +2,22 @@ package teamszg.initialisation_project.services;
 
 import org.springframework.stereotype.Service;
 import teamszg.initialisation_project.models.Person;
+import teamszg.initialisation_project.models.Series;
 import teamszg.initialisation_project.repositories.IPersonRepository;
+import teamszg.initialisation_project.repositories.ISeriesRepository;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PersonService {
 
     private final IPersonRepository personRepository;
+    private final ISeriesRepository seriesRepository;
 
-    public PersonService(IPersonRepository personRepository) {
+    public PersonService(IPersonRepository personRepository, ISeriesRepository seriesRepository) {
         this.personRepository = personRepository;
+        this.seriesRepository = seriesRepository;
     }
 
     public List<Person> searchByName(String name) throws Exception {
@@ -30,6 +35,30 @@ public class PersonService {
         }
         return persons;
     }
+
+    public Set<Series> getAllHistory(Long personId) throws Exception {
+        Person person = personRepository.findPersonById(personId);
+        if (person == null) {
+            throw new Exception("La personne avec l'ID " + personId + " n'a pas été trouvée.");
+        }
+        return person.getHistory();
+
+    }
+
+    public Person addHistory(Long personId, Long seriesId) throws Exception {
+        Person person = personRepository.findPersonById(personId);
+        Series series = seriesRepository.findSeriesById(seriesId);
+
+
+        if (!person.getHistory().contains(series)) {
+            person.getHistory().add(series);
+        } else {
+            // assez inutile... possiblement on va le supprimer
+            System.out.println("Cette série : "+ seriesId+ " est déjà dans l'historique de " + personId);
+        }
+        return personRepository.save(person);
+    }
+
 
     public Person updatePerson(Long id, Person updatePerson) throws Exception {
         Person personAvantUpdate = personRepository.findPersonById(id);

@@ -11,6 +11,4 @@ public interface ISeriesRepository extends JpaRepository<Series, Long> {
     List<Series> findSeriesByGenreIgnoreCase(String genre);
     List<Series> findSeriesBytitleIgnoreCase(String title);
     List<Series> findSeriesByNbEpisodesGreaterThanEqual(int nbEpisodes);
-
-
 }
