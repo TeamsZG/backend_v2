@@ -39,4 +39,10 @@ public class SeriesController {
         return "Supression de l'id serie: " + id ;
     }
 
+    @GetMapping("/search")
+    public List<Series> searchSeries(@RequestParam(required = false) String genre, @RequestParam(required = false) String title, @RequestParam(required = false) Integer minEpisode) throws Exception {
+        return seriesService.search(genre, title, minEpisode);
+    }
+
+
 }
