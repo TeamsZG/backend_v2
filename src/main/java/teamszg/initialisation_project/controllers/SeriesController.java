@@ -15,7 +15,6 @@ public class SeriesController {
     @Autowired
     private SeriesService seriesService;
 
-
     @GetMapping
     public List<Series> findAllSeries() throws Exception {
         return  seriesService.findAllSeries();
@@ -43,11 +42,5 @@ public class SeriesController {
     public List<Series> searchSeries(@RequestParam(required = false) String genre, @RequestParam(required = false) String title, @RequestParam(required = false) Integer minEpisode) throws Exception {
         return seriesService.search(genre, title, minEpisode);
     }
-
-
-
-
-
-
 
 }
