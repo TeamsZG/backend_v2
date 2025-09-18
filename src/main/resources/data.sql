@@ -1,5 +1,6 @@
 DELETE FROM Person;
 DELETE FROM series;
+DELETE FROM historique;
 
 insert into person (name, age, gender) values ('Shandee Tatters', 30, 'Male');
 insert into person (name, age, gender) values ('Sylas Northall', 32, 'Male');
