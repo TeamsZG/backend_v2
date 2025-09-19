@@ -11,6 +11,7 @@ public class SeriesService {
 
     private final ISeriesRepository seriesRepository;
 
+
     public SeriesService(ISeriesRepository seriesRepository) {
         this.seriesRepository = seriesRepository;
     }

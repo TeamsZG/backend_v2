@@ -27,7 +27,6 @@ public class PersonService {
     public Person addPersons(Person person) throws Exception {
         return personRepository.save(person);
     }
-
     public List<Person> getAllPersons() throws Exception {
         List<Person> persons = personRepository.findAll();
         if (persons.isEmpty()) {
@@ -43,6 +42,11 @@ public class PersonService {
         }
         return person.getHistory();
 
+    }
+
+    public Person getObjectPersonById(Long id){
+        Person person = personRepository.findPersonById(id);
+                return person;
     }
 
     public Person addHistory(Long personId, Long seriesId) throws Exception {

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import teamszg.initialisation_project.models.Person;
 import teamszg.initialisation_project.models.Series;
 import teamszg.initialisation_project.services.PersonService;
+import teamszg.initialisation_project.services.RecommandationsService;
 
 import java.util.List;
 import java.util.Set;
@@ -49,10 +50,9 @@ public class PersonController {
         return personService.getAllHistory(id);
     }
 
-
-
     @PostMapping("/{id}/history/{seriesId}")
     public Person addHistory(@PathVariable Long id, @PathVariable Long seriesId) throws Exception {
         return personService.addHistory(id, seriesId);
     }
+
 }
