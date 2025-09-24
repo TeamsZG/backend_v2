@@ -16,6 +16,7 @@ public class Series {
     private String genre;
     private int nbEpisodes;
     private double note;
+    private String img;
 
 
 
@@ -59,4 +60,11 @@ public class Series {
         this.note = note;
     }
 
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 }

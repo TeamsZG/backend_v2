@@ -3,23 +3,26 @@ package teamszg.initialisation_project.services;
 import org.springframework.stereotype.Service;
 import teamszg.initialisation_project.models.Person;
 import teamszg.initialisation_project.models.Series;
+import teamszg.initialisation_project.repositories.IPersonRepository;
 import teamszg.initialisation_project.repositories.IRecommendationRepository;
 import teamszg.initialisation_project.repositories.ISeriesRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 @Service
 public class RecommandationsService {
 
     private final IRecommendationRepository IrecommendationRepository;
+    private final IPersonRepository personRepository;
     private static SeriesService seriesService;
     private final PersonService personService;
     private final ISeriesRepository seriesRepository;
 
-    public RecommandationsService(IRecommendationRepository IRecommendationRepository, PersonService personService, ISeriesRepository seriesRepository) {
+    public RecommandationsService(IRecommendationRepository IRecommendationRepository, IPersonRepository personRepository, PersonService personService, ISeriesRepository seriesRepository) {
         this.IrecommendationRepository = IRecommendationRepository;
+        this.personRepository = personRepository;
         this.personService = personService;
         this.seriesRepository = seriesRepository;
     }
@@ -76,6 +79,103 @@ public class RecommandationsService {
     public List<Object[]> getBestGenre() {
         return IrecommendationRepository.top3Genre();
     }
+
+
+    public List<Map<String, Object>> getRecommendationsByCriteria(Long personId) throws Exception {
+
+        // récupérer la personne et gérer l'erreur
+        Person person = personService.getObjectPersonById(personId);
+        if (person == null) throw new Exception("Personne non trouvée");
+
+        // Récupérer ces genres préferer
+        Set<String> genres = person.getHistory().stream()
+                .map(s -> s.getGenre().toLowerCase())
+                .collect(Collectors.toSet());
+
+        List<Map<String, Object>> scoredSeries = new ArrayList<>();
+
+        // https://www.baeldung.com/java-iterate-map-list
+        //On parcours toutes les series et on crée un score selon les genre préferer et la note de la séries
+        //pour données un score sur 10 a peut près
+        for (Series s : seriesRepository.findAll()) {
+            if (!person.getHistory().contains(s)) {
+                double score = 0.0;
+
+                // +5 si c'est dans le même genre
+                if (genres.contains(s.getGenre().toLowerCase())) {
+                    score += 5;
+                }
+
+                // + la note/2 pour pouvoir faire un score sur 10 a peu près
+                score += s.getNote() / 2.0;
+
+                // https://www.baeldung.com/java-iterate-map-list
+                Map<String, Object> result = new HashMap<>();
+                result.put("series", s);
+                result.put("score", score);
+
+                scoredSeries.add(result);
+
+            }
+        }
+
+        // Trier par score décroissant pour de meilleurs recommandation
+        scoredSeries.sort((a, b) -> Double.compare(
+                (double) b.get("score"),
+                (double) a.get("score")
+        ));
+
+        //On limite le recomm a 10 parce qu'au sinon il y aura des score très bas vu qu'on divise la note en 2
+
+        List<Map<String, Object>> recommendations = scoredSeries.stream()
+                .limit(10)
+                .toList();
+
+        return recommendations;
+    }
+
+
+
+    public Map<String, Object> getRecommendationsBySimilarUsers(Long personId) throws Exception {
+        // récupérer la personne et gérer l'erreur
+        Person person = personService.getObjectPersonById(personId);
+        if (person == null) throw new Exception("Personne non trouvée");
+
+        //trouver le user avec le plus de similaritude avec le user dont l'id est donné dans le controller
+        Person similarUser = personRepository.findAll().stream()
+                .filter(u -> !u.getId().equals(person.getId()))
+                .max(Comparator.comparingInt(u ->
+                        (int) person.getHistory().stream()
+                                .filter(u.getHistory()::contains).count()
+                ))
+                .orElse(null);
+
+        // https://medium.com/%40AlexanderObregon/javas-map-getordefault-method-explained-4fb86992e4b5
+        //S'il n'y a pas de similar user cela gère l'erreur et rend juste un liste vide
+        Map<String, Object> result = new HashMap<>();
+
+        if (similarUser == null) {
+            result.put("similarUser", null);
+            result.put("recommendations", List.of());
+            return result;
+        }
+
+        // Limité les recom a max 10
+        List<Series> recommendations = similarUser.getHistory().stream()
+                .filter(s -> !person.getHistory().contains(s))
+                .limit(10)
+                .toList();
+
+        // afficher le similar user et son historique et les recommandation pour l'id donner dans la requête
+        result.put("similarUser", similarUser);
+        result.put("recommendations", recommendations);
+        return result;
+    }
+
+
+
+
+
 
 
 }
