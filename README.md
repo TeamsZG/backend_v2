@@ -41,7 +41,7 @@ L'application démarre sur : http://localhost:9594
 | ⚡ Méthode | 🌍 Route                          | 📝 Description                                             |
 |-----------|----------------------------------|------------------------------------------------------------|
 | **GET**   | `/persons`                       | Obtenir la liste de toutes les personnes                   |
-| **GET**   | `/persons/search?name=John`      | Rechercher une personne par nom                            |
+| **GET**   | `/persons/search?name=Sylas northall`      | Rechercher une personne par nom                            |
 | **POST**  | `/persons`                       | ➕ Ajouter une nouvelle personne                            |
 | **PUT**   | `/persons/{id}`                  | 🔄 Modifier une personne par son ID                        |
 | **DELETE**| `/persons/{id}`                  | ❌ Supprimer une personne par son ID                       |
@@ -59,7 +59,7 @@ L'application démarre sur : http://localhost:9594
 | **POST**  | `/series`                                              | ➕ Ajouter une nouvelle série                              |
 | **PUT**   | `/series/{id}`                                         | 🔄 Modifier une série existante                           |
 | **DELETE**| `/series/{id}`                                         | ❌ Supprimer une série par ID                             |
-| **GET**   | `/series/search?genre=drama&title=lost&minEpisode=10` | 🔍 Rechercher des séries par genre, titre ou nb épisodes  |
+| **GET**   | `series/search?genre=Science Fiction&title=Breaking Future&minEpisode=10` | 🔍 Rechercher des séries par genre, titre ou nb épisodes  |
 
 ---
 
