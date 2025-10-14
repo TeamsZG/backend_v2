@@ -1,7 +1,9 @@
 DELETE FROM Person;
 DELETE FROM series;
 DELETE FROM historique;
-DELETE  FROM episode;
+DELETE FROM episode;
+DELETE FROM rating_episode;
+DELETE FROM rating_serie;
 
 
 
