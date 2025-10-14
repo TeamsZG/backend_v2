@@ -23,6 +23,10 @@ public class RatingSerieService {
         Person person = personRepository.findById(personId).orElse(null);
         Series series = seriesRepository.findById(seriesId).orElse(null);
 
+        if(person != null && series != null){
+            throw new RuntimeException("Serie ou personne non existente");
+        }
+
         RatingSerie verificationRatingSerie = ratingSerieRepository.findByPersonAndSeries(person, series);
         if(verificationRatingSerie != null){
             verificationRatingSerie.setRating(rating);
@@ -36,7 +40,7 @@ public class RatingSerieService {
     }
 
     public double getRatingSerie(Long seriesId) {
-        Double moyenneSerieRating = ratingSerieRepository.averageBySeries(seriesId);
+        Double moyenneSerieRating = ratingSerieRepository.moyenneParSerie(seriesId);
 
         if (moyenneSerieRating == null) {
             throw new RuntimeException("Aucune note trouvée pour cette série.");

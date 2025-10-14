@@ -15,7 +15,8 @@ public class Series {
     private String title;
     private String genre;
     private int nbEpisodes;
-    private double note;
+    @Column(nullable = true)
+    private Double note;
     private String img;
 
 
@@ -52,11 +53,11 @@ public class Series {
         this.nbEpisodes = nbEpisodes;
     }
 
-    public double getNote() {
+    public Double getNote() {
         return note;
     }
 
-    public void setNote(double note) {
+    public void setNote(Double note) {
         this.note = note;
     }
 
@@ -67,4 +68,6 @@ public class Series {
     public void setImg(String img) {
         this.img = img;
     }
+
+
 }

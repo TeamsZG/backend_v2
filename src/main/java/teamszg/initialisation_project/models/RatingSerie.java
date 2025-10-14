@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 
 @Entity
-@Table(name = "RatingSerie")
+@Table(name = "ratingSerie")
 public class RatingSerie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +15,6 @@ public class RatingSerie {
     private Person person;
     @ManyToOne
     private Series series;
-
     private double rating;
 
 
