@@ -27,7 +27,6 @@ public class PersonService {
     public Person addPersons(Person person) throws Exception {
         return personRepository.save(person);
     }
-
     public List<Person> getAllPersons() throws Exception {
         List<Person> persons = personRepository.findAll();
         if (persons.isEmpty()) {
@@ -42,6 +41,7 @@ public class PersonService {
             throw new Exception("La personne avec l'ID " + personId + " n'a pas été trouvée.");
         }
         return person.getHistory();
+
     }
 
     public Person getObjectPersonById(Long id){
@@ -52,6 +52,8 @@ public class PersonService {
     public Person addHistory(Long personId, Long seriesId) throws Exception {
         Person person = personRepository.findPersonById(personId);
         Series series = seriesRepository.findSeriesById(seriesId);
+
+
         if (!person.getHistory().contains(series)) {
             person.getHistory().add(series);
         } else {
