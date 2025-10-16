@@ -43,5 +43,9 @@ public class SeriesController {
         return seriesService.search(genre, title, minEpisode);
     }
 
+    @GetMapping("/trending")
+    public List<Series> getTrendingSeries() throws Exception {
+        return seriesService.trending();
+    }
 
 }

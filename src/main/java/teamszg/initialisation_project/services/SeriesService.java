@@ -90,7 +90,27 @@ public class SeriesService {
         return allSeries;
     }
 
+    public List<Series> trending() throws Exception {
+        List<Series> allSeries = seriesRepository.findAll();
 
+        if (allSeries.isEmpty()) {
+            throw new Exception("Aucune série trouvée dans la base de données.");
+        }
+
+        // Poids des critères (modifiable selon ton besoin)
+        double facteurVues = 0.7;
+        double facteurNote = 0.3;
+
+        // Calcul du score de tendance pour chaque série
+        allSeries.sort((s1, s2) -> {
+            double score1 = s1.getViews() * facteurVues + (s1.getNote() != null ? s1.getNote() * facteurNote : 0);
+            double score2 = s2.getViews() * facteurVues + (s2.getNote() != null ? s2.getNote() * facteurNote : 0);
+            return Double.compare(score2, score1); // tri décroissant
+        });
+
+        // Retourne les 10 meilleures
+        return allSeries.stream().limit(10).toList();
+    }
 
 // Source retainAll https://www.w3schools.com/java/tryjava.asp?filename=demo_ref_arraylist_retainall
 }

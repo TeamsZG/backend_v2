@@ -19,6 +19,17 @@ public class Series {
     private Double note;
     private String img;
 
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
+    @Column(nullable = false)
+    private int views = 0;
+
 
 
     public Long getId() {
