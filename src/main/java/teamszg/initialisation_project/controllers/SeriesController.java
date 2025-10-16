@@ -43,4 +43,5 @@ public class SeriesController {
         return seriesService.search(genre, title, minEpisode);
     }
 
+
 }
