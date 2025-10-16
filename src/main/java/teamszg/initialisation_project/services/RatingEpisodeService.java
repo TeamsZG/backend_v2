@@ -30,18 +30,21 @@ public class RatingEpisodeService {
 
 
     }
-    public RatingEpisode addRatingEpisode(Long personId, Long episodeId, double rating) {
+    public RatingEpisode addRatingEpisode(Long personId, Long episodeId, double rating,Long serieId) {
         Person person = personRepository.findPersonById(personId);
         Episode episode = episodeRepository.findEpisodeById(episodeId);
+        Series series = seriesRepository.findSeriesById(serieId);
 
-        if (episode == null || person == null) {
-            throw new RuntimeException("Episode ou personne non existant(e)");
+        if (episode == null || person == null || series == null) {
+            throw new RuntimeException("Episode ou personne ou Serie non existant");
         }
         if(rating < 0 || rating > 10){
             throw new RuntimeException("Rating non valide");
         }
+        if (!episode.getSeries().getId().equals(series.getId())) {
+            throw new RuntimeException("L'épisode en question ne fait pas partie de la serie en question.");
+        }
 
-        Series series = episode.getSeries();
 
         RatingEpisode ratingEpisode = ratingEpisodeRepository.findRatingEpisodeByEpisodeAndSeriesAndPerson(episode, series, person);
 
@@ -71,13 +74,23 @@ public class RatingEpisodeService {
     // Par contre ce que ca peut nous aider c'est si on fait des faux information cela ne va pas le prendre en compte.
             // Exemple je post un episode et je dis qu'il a 5 de rate. Si je get il va dire qu'il n'a pas de valeur
             // Dit moi quelle option choisir
-    public double getRatingEpisode(Long episodeId) {
-        Double moyenne = ratingEpisodeRepository.moyenneParEpisode(episodeId);
-
-        if (moyenne == null) {
-            throw new RuntimeException("Aucune note trouvée pour cet épisode.");
+    public double getRatingEpisode(Long episodeId, Long serieId) {
+        Episode episode = episodeRepository.findEpisodeById(episodeId);
+        if (episode == null) {
+            throw new RuntimeException("Épisode non trouvé.");
         }
-
-        return moyenne;
+        Series series = seriesRepository.findSeriesById(serieId);
+        if (series == null) {
+            throw new RuntimeException("Série non trouvée.");
+        }
+        if (!episode.getSeries().getId().equals(series.getId())) {
+            throw new RuntimeException("L'épisode en question ne fait pas partie de la serie en question.");
+        }
+        Double moyenneEpisode = ratingEpisodeRepository.moyenneParEpisode(episodeId);
+        if (moyenneEpisode == null) {
+            throw new RuntimeException("Aucune note donnée pour cet épisode.");
+        }
+        return moyenneEpisode;
     }
+
 }

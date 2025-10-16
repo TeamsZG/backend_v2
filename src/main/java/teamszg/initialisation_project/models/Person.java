@@ -22,7 +22,11 @@ public class Person {
 
     private String gender;
 
+    @Column(unique = true)
+    private String email;
 
+    @Column(name = "password_hash")
+    private String passwordHash;
     @ManyToMany
     @JoinTable(
             name = "historique",
@@ -63,6 +67,22 @@ public class Person {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public Set<Series> getHistory() {
