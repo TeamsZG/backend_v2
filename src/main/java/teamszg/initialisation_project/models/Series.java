@@ -19,6 +19,8 @@ public class Series {
     private Double note;
     private String img;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int views;
     public int getViews() {
         return views;
     }
@@ -26,9 +28,6 @@ public class Series {
     public void setViews(int views) {
         this.views = views;
     }
-
-    @Column(nullable = false)
-    private int views = 0;
 
 
 
