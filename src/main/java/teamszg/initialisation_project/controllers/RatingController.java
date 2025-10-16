@@ -30,24 +30,25 @@ public class RatingController {
     public RatingEpisode postRatingEpisode(
             @PathVariable Long episodeId,
             @RequestParam double rating,
+            @RequestParam Long seriesId,
             @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
         if (userPrincipal == null) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Missing token");
-        return ratingEpisodeService.addRatingEpisode(userPrincipal.getId(), episodeId, rating);
+        return ratingEpisodeService.addRatingEpisode(userPrincipal.getId(), episodeId, rating, seriesId);
     }
     @GetMapping("/episode/{episodeId}")
-    public double getMoyenneEpisodeRating(@PathVariable Long episodeId) {
-        return ratingEpisodeService.getRatingEpisode(episodeId);
+    public double getMoyenneEpisodeRating(@PathVariable Long episodeId, @RequestParam Long seriesId ) {
+        return ratingEpisodeService.getRatingEpisode(episodeId, seriesId);
     }
 
     @PostMapping("/series/{seriesId}")
     public RatingSerie postRatingSeries(
             @PathVariable Long seriesId,
             @RequestParam double rating,
-            @AuthenticationPrincipal UserPrincipal me
+            @AuthenticationPrincipal UserPrincipal userPrincipal
     ) {
-        if (me == null) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Missing token");
-        return ratingSerieService.addRatingSerie(me.getId(), seriesId, rating);
+        if (userPrincipal == null) throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Missing token");
+        return ratingSerieService.addRatingSerie(userPrincipal.getId(), seriesId, rating);
     }
     @GetMapping("/series/{seriesId}")
     public double getMoyenneSeriesRating(@PathVariable Long seriesId) {
