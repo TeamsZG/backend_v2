@@ -18,6 +18,16 @@ public class Series {
     private double note;
     private String img;
 
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int views;
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
 
 
     public Long getId() {
