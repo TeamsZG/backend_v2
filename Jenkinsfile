@@ -35,25 +35,22 @@ pipeline {
       }
     }
 
-    stage('Test & Coverage') {
-      steps {
-        echo "=== Étape 3.3 et 4 : Tests + JaCoCo ==="
-        sh 'mvn -B clean verify'
-      }
-      post {
-        always {
-          junit allowEmptyResults: true, testResults: "${JUNIT_SUREFIRE}, ${JUNIT_FAILSAFE}"
-          recordCoverage(
-            tools: [
-              coverageAdapter(path: 'target/site/jacoco/jacoco.xml', parser: 'JACOCO')
-            ],
-            sourceDirectories: [[path: 'src/main/java']]
-          )
-
-          archiveArtifacts artifacts: 'target/site/jacoco/**', fingerprint: false, onlyIfSuccessful: false
-        }
-      }
+stage('Test & Coverage') {
+  steps {
+    sh 'mvn -B clean verify'
+  }
+  post {
+    always {
+      junit allowEmptyResults: true, testResults: 'target/surefire-reports/*.xml'
+      publishCoverage(
+        adapters: [jacocoAdapter('target/site/jacoco/jacoco.xml')],
+        sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
+      )
+      archiveArtifacts artifacts: 'target/site/jacoco/**', fingerprint: true
     }
+  }
+}
+
 
     stage('Docker Build (optionnel)') {
       when { expression { return params.BUILD_DOCKER } }
