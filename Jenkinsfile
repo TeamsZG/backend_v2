@@ -64,41 +64,59 @@ stage('Test & Coverage') {
     }
   }
 
+
   post {
     success {
-      emailext(
-        subject: "✅ [SUCCESS] Build #${BUILD_NUMBER} - ${JOB_NAME}",
-        body: """\
-        <h2>Build réussi ! 🎉</h2>
-        <p><b>Projet :</b> ${JOB_NAME}</p>
-        <p><b>Numéro du build :</b> ${BUILD_NUMBER}</p>
-        <p><b>Statut :</b> <span style='color:green;'>Succès ✅</span></p>
-        <p><b>URL Jenkins :</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
-        <hr>
-        <p><i>Message automatique envoyé par Jenkins.</i></p>
-        """,
-        to: '1985081@collegemv.qc.ca,2286754@collegemv.qc.ca,2185909@collegemv.qc.ca,2171825@collegemv.qc.ca',
-        from: '1985081@collegemv.qc.ca',
-        mimeType: 'text/html'
-      )
+      script {
+        def recipients = [
+          '1985081@collegemv.qc.ca',
+          '2286754@collegemv.qc.ca',
+          '2185909@collegemv.qc.ca',
+          '2171825@collegemv.qc.ca'
+        ]
+
+        for (r in recipients) {
+          emailext(
+            subject: "✅ [SUCCESS] Build #${BUILD_NUMBER} - ${JOB_NAME}",
+            body: """<h2>Build réussi 🎉</h2>
+            <p><b>Projet :</b> ${JOB_NAME}</p>
+            <p><b>Numéro du build :</b> ${BUILD_NUMBER}</p>
+            <p><b>Statut :</b> Succès ✅</p>
+            <p><a href="${BUILD_URL}">${BUILD_URL}</a></p>
+            <hr><i>Message automatique envoyé par Jenkins.</i>""",
+            to: r,
+            from: '1985081@collegemv.qc.ca',
+            mimeType: 'text/html'
+          )
+        }
+      }
     }
 
     failure {
-      emailext(
-        subject: "❌ [FAILURE] Build #${BUILD_NUMBER} - ${JOB_NAME}",
-        body: """\
-        <h2>Build échoué ❌</h2>
-        <p><b>Projet :</b> ${JOB_NAME}</p>
-        <p><b>Numéro du build :</b> ${BUILD_NUMBER}</p>
-        <p><b>Statut :</b> <span style='color:red;'>Échec</span></p>
-        <p><b>URL Jenkins :</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
-        <hr>
-        <p><i>Message automatique envoyé par Jenkins.</i></p>
-        """,
-        to: '1985081@collegemv.qc.ca,2286754@collegemv.qc.ca,2185909@collegemv.qc.ca,2171825@collegemv.qc.ca',
-        from: '1985081@collegemv.qc.ca',
-        mimeType: 'text/html'
-      )
+      script {
+        def recipients = [
+          '1985081@collegemv.qc.ca',
+          '2286754@collegemv.qc.ca',
+          '2185909@collegemv.qc.ca',
+          '2171825@collegemv.qc.ca'
+        ]
+
+        for (r in recipients) {
+          emailext(
+            subject: "❌ [FAILURE] Build #${BUILD_NUMBER} - ${JOB_NAME}",
+            body: """<h2>Build échoué ❌</h2>
+            <p><b>Projet :</b> ${JOB_NAME}</p>
+            <p><b>Numéro du build :</b> ${BUILD_NUMBER}</p>
+            <p><b>Statut :</b> <span style='color:red;'>Échec</span></p>
+            <p><b>URL Jenkins :</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
+            <hr><i>Message automatique envoyé par Jenkins.</i>""",
+            to: r,
+            from: '1985081@collegemv.qc.ca',
+            mimeType: 'text/html'
+          )
+        }
+      }
     }
   }
 }
+
