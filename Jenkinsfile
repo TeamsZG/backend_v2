@@ -44,7 +44,9 @@ pipeline {
         always {
           junit allowEmptyResults: true, testResults: "${JUNIT_SUREFIRE}, ${JUNIT_FAILSAFE}"
           recordCoverage(
-            tools: [jacocoAdapter("${JACOCO_XML}")],
+            adapters: [
+              coverageAdapter(pattern: 'target/site/jacoco/jacoco.xml', parser: 'JACOCO')
+            ],
             sourceDirectories: [[path: 'src/main/java']]
           )
           archiveArtifacts artifacts: 'target/site/jacoco/**', fingerprint: false, onlyIfSuccessful: false
