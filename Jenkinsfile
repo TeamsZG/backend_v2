@@ -27,32 +27,27 @@ pipeline {
       }
     }
 
-    stage('Build & Package') {
-      steps {
-        sh 'mvn -B -DskipTests=false clean package'
-      }
-      post {
-        always {
-          archiveArtifacts artifacts: "${ARTIFACTS}", fingerprint: true, onlyIfSuccessful: false
-        }
-      }
-    }
+stage('Build & Package') {
+  steps {
+    sh 'mvn -B -DskipTests=true clean package'
+  }
+}
 
-    stage('Test & Coverage') {
-      steps {
-        sh 'mvn -B verify'
-      }
-      post {
-        always {
-          junit allowEmptyResults: true, testResults: "${JUNIT_SUREFIRE}, ${JUNIT_FAILSAFE}"
-          recordCoverage(
-            tools: [jacocoAdapter("${JACOCO_XML}")],
-            sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
-          )
-          archiveArtifacts artifacts: 'target/site/jacoco/**', fingerprint: false, onlyIfSuccessful: false
-        }
-      }
+stage('Test & Coverage') {
+  steps {
+    sh 'mvn -B clean verify'
+  }
+  post {
+    always {
+      junit allowEmptyResults: true, testResults: "${JUNIT_SUREFIRE}, ${JUNIT_FAILSAFE}"
+      recordCoverage(
+        tools: [jacocoAdapter("${JACOCO_XML}")],
+        sourceFileResolver: sourceFiles('STORE_LAST_BUILD')
+      )
+      archiveArtifacts artifacts: 'target/site/jacoco/**', fingerprint: false, onlyIfSuccessful: false
     }
+  }
+}
 
     stage('Docker Build (optionnel)') {
       when { expression { return params.BUILD_DOCKER } }
