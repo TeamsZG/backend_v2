@@ -65,39 +65,44 @@ stage('Test & Coverage') {
   }
 
 
-  post {
-     success {
-       emailext(
-         subject: "✅ [SUCCESS] Build #${BUILD_NUMBER} - ${JOB_NAME}",
-         body: """\
-         <h2>Build réussi 🎉</h2>
-         <p><b>Projet :</b> ${JOB_NAME}</p>
-         <p><b>Numéro du build :</b> ${BUILD_NUMBER}</p>
-         <p><b>Statut :</b> <span style='color:green;'>Succès ✅</span></p>
-         <p><b>URL Jenkins :</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
-         <hr><i>Message automatique envoyé par Jenkins.</i>
-         """,
-         to: 'chadi-elchami@outlook.com',
-         from: 'chadi-elchami@outlook.com',
-         mimeType: 'text/html'
-       )
-     }
+post {
+  success {
+    script {
+      withCredentials([string(credentialsId: 'DISCORD_WEBHOOK', variable: 'WEBHOOK')]) {
+        sh '''
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{
+                    \\"username\\": \\"Jenkins\\",
+                    \\"embeds\\": [{
+                      \\"title\\": \\"✅ Build #${BUILD_NUMBER} réussi !\\",
+                      \\"description\\": \\"Projet **${JOB_NAME}**\\nStatut: ✅ **SUCCÈS**\\n[Voir les détails du build](${BUILD_URL})\\",
+                      \\"color\\": 3066993
+                    }]
+                  }" \
+               "$WEBHOOK"
+        '''
+      }
+    }
+  }
 
-     failure {
-       emailext(
-         subject: "❌ [FAILURE] Build #${BUILD_NUMBER} - ${JOB_NAME}",
-         body: """\
-         <h2>Build échoué ❌</h2>
-         <p><b>Projet :</b> ${JOB_NAME}</p>
-         <p><b>Numéro du build :</b> ${BUILD_NUMBER}</p>
-         <p><b>Statut :</b> <span style='color:red;'>Échec</span></p>
-         <p><b>URL Jenkins :</b> <a href="${BUILD_URL}">${BUILD_URL}</a></p>
-         <hr><i>Message automatique envoyé par Jenkins.</i>
-         """,
-         to: 'chadi-elchami@outlook.com',
-         from: 'chadi-elchami@outlook.com',
-         mimeType: 'text/html'
-       )
-     }
-   }
- }
+  failure {
+    script {
+      withCredentials([string(credentialsId: 'DISCORD_WEBHOOK', variable: 'WEBHOOK')]) {
+        sh '''
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d "{
+                    \\"username\\": \\"Jenkins\\",
+                    \\"embeds\\": [{
+                      \\"title\\": \\"❌ Build #${BUILD_NUMBER} échoué\\",
+                      \\"description\\": \\"Projet **${JOB_NAME}**\\nStatut: ❌ **ÉCHEC**\\n[Voir les détails du build](${BUILD_URL})\\",
+                      \\"color\\": 15158332
+                    }]
+                  }" \
+               "$WEBHOOK"
+        '''
+      }
+    }
+  }
+}
