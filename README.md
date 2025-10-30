@@ -74,6 +74,19 @@ L'application démarre sur : http://localhost:9594
 
 ---
 
+## 📚 Documentation du Code (JavaDoc)
+### 🔹 Génération de la documentation
+```bash
+# Pour générer la documentation Java du projet :
+mvn javadoc:javadoc
+
+# La documentation est générée dans :
+target/site/apidocs/index.html
+```
+👉 Ouvrez ce fichier dans votre navigateur pour consulter la documentation complète du code.
+
+---
+
 ## 👥 Équipe
 
 ### Backend
