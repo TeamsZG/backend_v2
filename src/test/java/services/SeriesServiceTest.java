@@ -6,10 +6,7 @@ import org.mockito.*;
 import teamszg.initialisation_project.models.Series;
 import teamszg.initialisation_project.repositories.ISeriesRepository;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -143,4 +140,88 @@ class SeriesServiceTest {
         Exception exception = assertThrows(Exception.class, () -> seriesService.search(null, "", 0));
         assertEquals("Oups filtre non validé", exception.getMessage());
     }
+
+
+
+
+
+
+    @Test
+    void testSearchByTitle_only() throws Exception {
+        Series a = new Series();
+        a.setId(1L); a.setTitle("Ghost Hunters"); a.setGenre("Horror"); a.setNbEpisodes(12);
+
+        Series b = new Series();
+        b.setId(2L); b.setTitle("Space Ghost"); b.setGenre("SciFi"); b.setNbEpisodes(8);
+
+        // IMPORTANT: listes mutables + mêmes instances partout
+        List<Series> all = new ArrayList<>(Arrays.asList(a, b));
+        when(seriesRepository.findAll()).thenReturn(all);
+        when(seriesRepository.findSeriesBytitleIgnoreCase("Ghost"))
+                .thenReturn(new ArrayList<>(Arrays.asList(a, b)));
+
+        List<Series> result = seriesService.search(null, "Ghost", null);
+
+        assertEquals(2, result.size());
+        assertTrue(result.containsAll(Arrays.asList(a, b)));
+    }
+
+    @Test
+    void testSearchByMinEpisodes_only() throws Exception {
+        Series a = new Series();
+        a.setId(1L); a.setTitle("Short Show"); a.setGenre("Drama"); a.setNbEpisodes(5);
+
+        Series b = new Series();
+        b.setId(2L); b.setTitle("Long Show"); b.setGenre("Drama"); b.setNbEpisodes(20);
+
+        List<Series> all = new ArrayList<>(Arrays.asList(a, b));
+        when(seriesRepository.findAll()).thenReturn(all);
+        when(seriesRepository.findSeriesByNbEpisodesGreaterThanEqual(10))
+                .thenReturn(new ArrayList<>(List.of(b)));
+
+        List<Series> result = seriesService.search(null, null, 10);
+
+        assertEquals(1, result.size());
+        assertSame(b, result.get(0));
+    }
+
+    @Test
+    void testSearchCombined_genre_title_minEpisodes() throws Exception {
+        Series a = new Series();
+        a.setId(1L); a.setTitle("Crime Files"); a.setGenre("Crime"); a.setNbEpisodes(8);
+        Series b = new Series();
+        b.setId(2L); b.setTitle("Mega Crime Saga"); b.setGenre("Crime"); b.setNbEpisodes(50);
+
+        List<Series> all = new ArrayList<>(Arrays.asList(a, b));
+        when(seriesRepository.findAll()).thenReturn(all);
+
+        when(seriesRepository.findSeriesByGenreIgnoreCase("Crime"))
+                .thenReturn(new ArrayList<>(Arrays.asList(a, b))); // garde les 2
+        when(seriesRepository.findSeriesBytitleIgnoreCase("Crime"))
+                .thenReturn(new ArrayList<>(Arrays.asList(a, b))); // garde les 2
+        when(seriesRepository.findSeriesByNbEpisodesGreaterThanEqual(10))
+                .thenReturn(new ArrayList<>(List.of(b)));          // garde b seulement
+
+        List<Series> result = seriesService.search("Crime", "Crime", 10);
+
+        assertEquals(1, result.size());
+        assertSame(b, result.get(0));
+    }
+
+    @Test
+    void testUpdateSeries_notFound_throws() {
+        when(seriesRepository.findSeriesById(99L)).thenReturn(null);
+        Series payload = new Series();
+        payload.setTitle("X"); payload.setGenre("Y"); payload.setNbEpisodes(1);
+        Exception ex = assertThrows(Exception.class, () -> seriesService.updateSeries(99L, payload));
+        assertTrue(ex.getMessage().toLowerCase().contains("n'a pas été trouvée"));
+    }
+
+    @Test
+    void testDeleteSeries_notFound_throws() {
+        when(seriesRepository.findSeriesById(123L)).thenReturn(null);
+        Exception ex = assertThrows(Exception.class, () -> seriesService.deleteSeries(123L));
+        assertTrue(ex.getMessage().toLowerCase().contains("n'a pas été trouvée"));
+    }
+
 }

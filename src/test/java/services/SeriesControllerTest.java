@@ -1,35 +1,58 @@
-package teamszg.initialisation_project.controllers;
+package services;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import teamszg.initialisation_project.InitialisationProjectApplication;
+import teamszg.initialisation_project.controllers.SeriesController;
 import teamszg.initialisation_project.models.Series;
 import teamszg.initialisation_project.services.SeriesService;
+import teamszg.initialisation_project.security.JwtAuthFilter;
+import teamszg.initialisation_project.security.JwtService;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(SeriesController.class)
+// Point le test vers ta classe @SpringBootApplication
+@ContextConfiguration(classes = InitialisationProjectApplication.class)
+@WebMvcTest(
+        controllers = SeriesController.class,
+        excludeFilters = @ComponentScan.Filter(
+                type = FilterType.ASSIGNABLE_TYPE,
+                classes = { JwtAuthFilter.class } // <-- empêche la création du filtre
+        )
+)
+@AutoConfigureMockMvc(addFilters = false) // <-- n’applique pas les filtres de sécurité
 class SeriesControllerTest {
+    @Autowired private MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
 
-    @Autowired
-    private MockMvc mockMvc;
+    // tes mocks existants
+    @MockBean private SeriesService seriesService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @MockBean
-    private SeriesService seriesService;
+    // au cas où quelque chose autowire JwtService (rare ici)
+    @MockBean private JwtService jwtService;
 
     private Series series1;
     private Series series2;
@@ -126,4 +149,20 @@ class SeriesControllerTest {
                 .andExpect(jsonPath("$[0].title").value("Breaking Bad"))
                 .andExpect(jsonPath("$[0].genre").value("Crime"));
     }
+
+
+    @Test
+    void testSearchByGenre_only_controller() throws Exception {
+        Series s = new Series();
+        s.setId(10L); s.setTitle("Horror Night"); s.setGenre("Horror"); s.setNbEpisodes(10);
+
+        when(seriesService.search("Horror", null, null))
+                .thenReturn(Arrays.asList(s));
+
+        mockMvc.perform(get("/series/search").param("genre", "Horror"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].title").value("Horror Night"));
+    }
+
+
 }
