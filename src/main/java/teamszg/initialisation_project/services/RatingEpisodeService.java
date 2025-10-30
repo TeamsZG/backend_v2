@@ -10,6 +10,13 @@ import teamszg.initialisation_project.repositories.IPersonRepository;
 import teamszg.initialisation_project.repositories.IRatingEpisodeRepository;
 import teamszg.initialisation_project.repositories.ISeriesRepository;
 
+/**
+ * Service pour gérer les notes (ratings) des épisodes.
+ * <p>
+ * Permet d'ajouter ou mettre à jour un rating pour un épisode,
+ * et de récupérer la moyenne des notes d'un épisode.
+ * </p>
+ */
 
 @Service
 public class RatingEpisodeService {

@@ -1,11 +1,22 @@
 package teamszg.initialisation_project.security;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.*;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import teamszg.initialisation_project.models.Person;
 import teamszg.initialisation_project.repositories.IPersonRepository;
+
 import java.util.Collections;
+
+/**
+ * Service de gestion des détails d'un utilisateur pour Spring Security.
+ * <p>
+ * Implémente {@link UserDetailsService} afin de charger les informations d'authentification
+ * d'un utilisateur à partir de son email.
+ * </p>
+ */
 
 @Service
 public class AppUserDetailsService implements UserDetailsService {
@@ -21,7 +32,7 @@ public class AppUserDetailsService implements UserDetailsService {
         Person p = repo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Not found: " + email));
 
-        return org.springframework.security.core.userdetails.User
+        return User
                 .withUsername(p.getEmail())
                 .password(p.getPasswordHash())
                 .authorities(Collections.emptyList())

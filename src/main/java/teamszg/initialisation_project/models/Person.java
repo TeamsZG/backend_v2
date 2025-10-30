@@ -2,11 +2,16 @@ package teamszg.initialisation_project.models;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+/**
+ * Représente une personne utilisant l’application.
+ * <p>
+ * Cette entité est persistée dans la table "person" de la base de données.
+ * Une personne possède un historique des séries regardées et des informations personnelles.
+ * </p>
+ */
 
 @Entity
 @Table(name = "person")

@@ -1,15 +1,25 @@
 package teamszg.initialisation_project.controllers;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import teamszg.initialisation_project.models.Person;
 import teamszg.initialisation_project.repositories.IPersonRepository;
 import teamszg.initialisation_project.security.JwtService;
 
-import java.util.*;
+import java.util.Map;
+
+/**
+ * Contrôleur responsable de la gestion de l'authentification des utilisateurs.
+ * <p>
+ * Cette classe gère la connexion d'un utilisateur à partir de son adresse e-mail et de son mot de passe.
+ * Si les informations d'identification sont valides, un token JWT est généré et renvoyé.
+ * </p>
+ */
 
 @RestController
 @RequestMapping("/auth")

@@ -7,6 +7,14 @@ import teamszg.initialisation_project.models.Person;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Interface de repository pour gérer la persistance des {@link Person}.
+ * <p>
+ * Cette interface étend {@link JpaRepository} pour bénéficier des méthodes CRUD et
+ * permet de définir des méthodes de recherche personnalisées spécifiques aux personnes.
+ * </p>
+ */
+
 @Repository
 public interface IPersonRepository extends JpaRepository<Person, Long> {
     Person findPersonById(Long id);

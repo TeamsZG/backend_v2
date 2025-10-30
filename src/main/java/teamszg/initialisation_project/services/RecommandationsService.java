@@ -10,6 +10,13 @@ import teamszg.initialisation_project.repositories.ISeriesRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service pour gérer les recommandations de séries.
+ * <p>
+ * Fournit des recommandations basées sur l'historique de visionnage
+ * d'un utilisateur, les genres les plus populaires et les utilisateurs similaires.
+ * </p>
+ */
 
 @Service
 public class RecommandationsService {

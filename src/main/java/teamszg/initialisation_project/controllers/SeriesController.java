@@ -3,10 +3,16 @@ package teamszg.initialisation_project.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import teamszg.initialisation_project.models.Series;
-
 import teamszg.initialisation_project.services.SeriesService;
 
 import java.util.List;
+
+/**
+ * Contrôleur REST responsable de la gestion des séries.
+ *
+ * Il permet d’effectuer toutes les opérations CRUD (Create, Read, Update, Delete),
+ * ainsi que des recherches et la récupération des séries populaires.
+ */
 
 @RestController
 @CrossOrigin

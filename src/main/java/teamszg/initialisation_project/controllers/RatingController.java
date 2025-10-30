@@ -12,6 +12,12 @@ import teamszg.initialisation_project.security.UserPrincipal;
 import teamszg.initialisation_project.services.RatingEpisodeService;
 import teamszg.initialisation_project.services.RatingSerieService;
 
+/**
+ * Contrôleur responsable de la gestion des évaluations (ratings)
+ * des épisodes et des séries.
+ * Fournit des endpoints pour créer et consulter les notes.
+ */
+
 @RestController
 @CrossOrigin
 @RequestMapping("/ratings")

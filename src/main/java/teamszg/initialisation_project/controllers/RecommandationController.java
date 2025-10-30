@@ -8,6 +8,16 @@ import teamszg.initialisation_project.services.RecommandationsService;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Contrôleur responsable de la gestion des recommandations personnalisées
+ * pour les utilisateurs, basées sur leurs préférences et leur historique de visionnage.
+ *
+ * Fournit plusieurs types de recommandations :
+ * - Par genre préféré
+ * - Basées sur le profil utilisateur
+ * - Basées sur des critères similaires
+ * - Basées sur des utilisateurs au comportement similaire
+ */
 
 @RestController
 @CrossOrigin

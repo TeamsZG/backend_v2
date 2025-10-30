@@ -9,6 +9,14 @@ import teamszg.initialisation_project.repositories.ISeriesRepository;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Service pour gérer les opérations liées aux personnes.
+ * <p>
+ * Fournit des méthodes pour créer, lire, mettre à jour, supprimer des personnes,
+ * et gérer l'historique des séries visionnées par une personne.
+ * </p>
+ */
+
 @Service
 public class PersonService {
 
@@ -27,6 +35,7 @@ public class PersonService {
     public Person addPersons(Person person) throws Exception {
         return personRepository.save(person);
     }
+
     public List<Person> getAllPersons() throws Exception {
         List<Person> persons = personRepository.findAll();
         if (persons.isEmpty()) {
@@ -41,7 +50,6 @@ public class PersonService {
             throw new Exception("La personne avec l'ID " + personId + " n'a pas été trouvée.");
         }
         return person.getHistory();
-
     }
 
     public Person getObjectPersonById(Long id){
@@ -52,8 +60,6 @@ public class PersonService {
     public Person addHistory(Long personId, Long seriesId) throws Exception {
         Person person = personRepository.findPersonById(personId);
         Series series = seriesRepository.findSeriesById(seriesId);
-
-
         if (!person.getHistory().contains(series)) {
             person.getHistory().add(series);
         } else {

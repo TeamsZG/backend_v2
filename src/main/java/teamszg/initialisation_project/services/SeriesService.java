@@ -6,6 +6,14 @@ import teamszg.initialisation_project.repositories.ISeriesRepository;
 
 import java.util.List;
 
+/**
+ * Service pour gérer les séries.
+ * <p>
+ * Fournit des méthodes pour récupérer, créer, mettre à jour, supprimer,
+ * rechercher et obtenir les séries tendance.
+ * </p>
+ */
+
 @Service
 public class SeriesService {
 

@@ -1,10 +1,19 @@
 package teamszg.initialisation_project.security;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Service;
+
 import javax.crypto.SecretKey;
 import java.util.Date;
+
+/**
+ * Service pour gérer la création et la validation des tokens JWT.
+ * <p>
+ * Fournit des méthodes pour générer un token signé pour un utilisateur et
+ * pour extraire les claims (données) depuis un token existant.
+ * </p>
+ */
 
 @Service
 public class JwtService {

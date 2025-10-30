@@ -1,10 +1,19 @@
 package teamszg.initialisation_project.repositories;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.jpa.repository.JpaRepository;
 import teamszg.initialisation_project.models.Series;
+
+import java.util.List;
+
+/**
+ * Interface de repository pour gérer les requêtes spécifiques aux recommandations.
+ * <p>
+ * Cette interface étend {@link JpaRepository} pour bénéficier des méthodes CRUD sur {@link Series}.
+ * Elle inclut également des requêtes personnalisées pour obtenir les genres les plus populaires.
+ * </p>
+ */
 
 @Repository
 public interface IRecommendationRepository extends JpaRepository<Series, Long> {
